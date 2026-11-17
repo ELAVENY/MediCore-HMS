@@ -22,6 +22,14 @@ const billingRoutes = require('./routes/billingRoutes');
 const labRoutes = require('./routes/labRoutes');
 const staffRoutes = require('./routes/staffRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const opdRoutes = require('./routes/opdRoutes');
+const medicalRecordRoutes = require('./routes/medicalRecordRoutes');
+const prescriptionRoutes = require('./routes/prescriptionRoutes');
+const radiologyRoutes = require('./routes/radiologyRoutes');
+const bloodBankRoutes = require('./routes/bloodBankRoutes');
+const ambulanceRoutes = require('./routes/ambulanceRoutes');
+const userRoutes = require('./routes/userRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
 
 const app = express();
 
@@ -63,6 +71,14 @@ app.use('/api/pharmacy', pharmacyRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/lab', labRoutes);
 app.use('/api/staff', staffRoutes);
+app.use('/api/opd', opdRoutes);
+app.use('/api/medical-records', medicalRecordRoutes);
+app.use('/api/prescriptions', prescriptionRoutes);
+app.use('/api/radiology', radiologyRoutes);
+app.use('/api/blood-bank', bloodBankRoutes);
+app.use('/api/ambulance', ambulanceRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // ─── Error Handling ────────────────────────────────────────────────────────────
 app.use(notFound);

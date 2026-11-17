@@ -1,23 +1,22 @@
+import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { reportsService } from '@/services/reportsService';
 
-const monthlyData = [
-  { month: 'Jun', patients: 320, revenue: 142000 },
-  { month: 'Jul', patients: 380, revenue: 165000 },
-  { month: 'Aug', patients: 410, revenue: 178000 },
-  { month: 'Sep', patients: 390, revenue: 155000 },
-  { month: 'Oct', patients: 450, revenue: 192000 },
-  { month: 'Nov', patients: 480, revenue: 210000 },
-];
-
-const deptData = [
-  { name: 'Cardiology', value: 320, color: '#1e3a8a' },
-  { name: 'Orthopedics', value: 210, color: '#0d9488' },
-  { name: 'General', value: 450, color: '#7c3aed' },
-  { name: 'Neurology', value: 180, color: '#ea580c' },
-  { name: 'Maternity', value: 150, color: '#db2777' },
-];
+const COLORS = ['#1e3a8a', '#0d9488', '#7c3aed', '#ea580c', '#db2777', '#16a34a', '#ca8a04', '#dc2626'];
 
 export default function Reports() {
+  const [trend, setTrend] = useState([]);
+  const [deptStats, setDeptStats] = useState([]);
+  const [summary, setSummary] = useState({});
+
+  useEffect(() => {
+    reportsService.getMonthlyTrend().then(r => setTrend(r.data.data?.data || [])).catch(() => {});
+    reportsService.getDepartmentStats().then(r => {
+      const mapped = (r.data.data?.stats || []).map((s, i) => ({ name: s._id, value: s.count, color: COLORS[i % COLORS.length] }));
+      setDeptStats(mapped);
+    }).catch(() => {});
+    reportsService.getSummary().then(r => setSummary(r.data.data || {})).catch(() => {});
+  }, []);
   return (
     <div className="space-y-5">
       <div>
@@ -28,10 +27,10 @@ export default function Reports() {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total Patients (YTD)', value: '4,821' },
-          { label: 'Revenue (YTD)', value: '₹18.6L' },
-          { label: 'Avg Daily OPD', value: '89' },
-          { label: 'Bed Occupancy Rate', value: '72%' },
+          { label: 'Total Patients (YTD)', value: summary.totalPatients ?? '—' },
+          { label: 'Revenue (YTD)', value: summary.totalRevenue ? `₹${Number(summary.totalRevenue).toLocaleString()}` : '—' },
+          { label: 'Avg Daily OPD', value: summary.opdToday ?? '—' },
+          { label: 'Total Admissions', value: summary.totalAdmissions ?? '—' },
         ].map(s => (
           <div key={s.label} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
             <p className="text-2xl font-bold text-gray-900">{s.value}</p>
@@ -45,7 +44,7 @@ export default function Reports() {
         <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
           <h3 className="font-semibold text-gray-800 mb-4">Monthly Patients & Revenue</h3>
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={monthlyData}>
+            <BarChart data={trend.length ? trend : [{ month: '-', patients: 0, revenue: 0 }]}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
@@ -63,7 +62,7 @@ export default function Reports() {
           <h3 className="font-semibold text-gray-800 mb-4">Patients by Department</h3>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
-              <Pie data={deptData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+              <Pie data={deptStats.length ? deptStats : [{ name: 'No data', value: 1, color: '#e5e7eb' }]} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
                 {deptData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Pie>
               <Tooltip />
