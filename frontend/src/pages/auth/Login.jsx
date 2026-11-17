@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Eye, EyeOff } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,16 +16,13 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    setTimeout(() => {
-      if (form.email === 'admin@medicore.com' && form.password === 'Admin@123') {
-        localStorage.setItem('accessToken', 'demo_token');
-        localStorage.setItem('user', JSON.stringify({ name: 'Dr. Admin', role: 'super_admin', email: form.email }));
-        navigate('/dashboard');
-      } else {
-        setError('Invalid credentials. Use admin@medicore.com / Admin@123');
-      }
-      setLoading(false);
-    }, 800);
+    const result = await login(form.email, form.password);
+    setLoading(false);
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setError(result.message);
+    }
   };
 
   return (
@@ -76,7 +75,8 @@ export default function Login() {
           </form>
 
           <div className="mt-5 p-3 bg-blue-50 rounded-lg text-xs text-blue-700">
-            <strong>Demo:</strong> admin@medicore.com / Admin@123
+            <strong>Demo:</strong> admin@medicore.com / Admin@123<br/>
+            <span className="text-blue-500">Run <code>npm run seed</code> in backend to create demo accounts.</span>
           </div>
         </div>
       </div>

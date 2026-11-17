@@ -19,11 +19,11 @@ import BloodBank from '@/pages/blood-bank/BloodBank';
 import Staff from '@/pages/staff/Staff';
 import Users from '@/pages/users/Users';
 import Reports from '@/pages/reports/Reports';
+import { useAuth } from '@/context/AuthContext';
 
-// Simple auth guard
 function RequireAuth({ children }) {
-  const token = localStorage.getItem('accessToken');
-  return token ? children : <Navigate to="/login" replace />;
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
 
 export default function AppRoutes() {

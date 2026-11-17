@@ -60,21 +60,26 @@ Super Admin · Admin · Doctor · Nurse · Receptionist · Pharmacist · Lab Tec
 ### Prerequisites
 - Node.js v18+
 - MongoDB (local or Atlas)
+- Git
 
 ### Backend Setup
 ```bash
 cd backend
 npm install
-cp .env.example .env   # fill in your values
-npm run dev
+cp .env.example .env
+# Edit .env: fill in MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET
+npm run seed   # Creates demo admin: admin@medicore.com / Admin@123
+npm run dev    # Starts on http://localhost:5000
 ```
 
 ### Frontend Setup
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run dev    # Starts on http://localhost:5173
 ```
+
+Login with: **admin@medicore.com** / **Admin@123**
 
 ### Environment Variables (backend/.env)
 ```

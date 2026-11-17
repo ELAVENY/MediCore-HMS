@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import {
   UserRound, Stethoscope, CalendarDays, BedDouble,
   TrendingUp, FlaskConical, Receipt, Users
 } from 'lucide-react';
 import DashboardCard from '@/components/common/DashboardCard';
 import StatusBadge from '@/components/ui/StatusBadge';
+import { dashboardService } from '@/services/dashboardService';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, Legend
@@ -43,6 +45,19 @@ const upcomingAppointments = [
 ];
 
 export default function Dashboard() {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    dashboardService.getStats()
+      .then(({ data }) => setStats(data.data))
+      .catch(() => {}); // falls back to mock numbers below
+  }, []);
+
+  const s = stats || {};
+  const totalPatients = s.totalPatients ?? '4,821';
+  const activeDoctors = s.activeDoctors ?? '68';
+  const todayAppointments = s.todayAppointments ?? '143';
+  const currentAdmissions = s.currentAdmissions ?? '204';
   return (
     <div className="space-y-6">
       {/* Page Title */}
@@ -53,10 +68,10 @@ export default function Dashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <DashboardCard title="Total Patients" value="4,821" icon={UserRound} color="blue" trend="up" trendValue="+12% this month" />
-        <DashboardCard title="Active Doctors" value="68" icon={Stethoscope} color="teal" />
-        <DashboardCard title="Today's Appointments" value="143" icon={CalendarDays} color="purple" trend="up" trendValue="+8 from yesterday" />
-        <DashboardCard title="Occupied Beds" value="204/280" icon={BedDouble} color="orange" />
+        <DashboardCard title="Total Patients" value={totalPatients} icon={UserRound} color="blue" trend="up" trendValue="+12% this month" />
+        <DashboardCard title="Active Doctors" value={activeDoctors} icon={Stethoscope} color="teal" />
+        <DashboardCard title="Today's Appointments" value={todayAppointments} icon={CalendarDays} color="purple" trend="up" trendValue="+8 from yesterday" />
+        <DashboardCard title="Occupied Beds" value={currentAdmissions} icon={BedDouble} color="orange" />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <DashboardCard title="Pending Lab Tests" value="37" icon={FlaskConical} color="green" />
