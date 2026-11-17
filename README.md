@@ -45,15 +45,15 @@ Super Admin · Admin · Doctor · Nurse · Receptionist · Pharmacist · Lab Tec
 | Phase | Description | Status |
 |-------|-------------|--------|
 | Phase 1 | Project Setup & Architecture | ✅ Done |
-| Phase 2 | Frontend UI Design | 🔄 In Progress |
-| Phase 3 | Authentication & Role Management | ⏳ Pending |
-| Phase 4 | Patient & Doctor Management | ⏳ Pending |
-| Phase 5 | Appointment, OPD & IPD | ⏳ Pending |
-| Phase 6 | Ward, Bed & Medical Records | ⏳ Pending |
-| Phase 7 | Prescription & Pharmacy | ⏳ Pending |
-| Phase 8 | Laboratory & Radiology | ⏳ Pending |
-| Phase 9 | Billing, Ambulance, Blood Bank & Staff | ⏳ Pending |
-| Phase 10 | Integration, Testing & Deployment | ⏳ Pending |
+| Phase 2 | Frontend UI Design | ✅ Done |
+| Phase 3 | Authentication, All Models, Controllers & Routes | ✅ Done |
+| Phase 4 | Patient & Doctor Management | ✅ Done |
+| Phase 5 | Appointment, OPD & IPD | ✅ Done |
+| Phase 6 | Ward, Bed & Medical Records | ✅ Done |
+| Phase 7 | Prescription & Pharmacy | ✅ Done |
+| Phase 8 | Laboratory & Radiology | ✅ Done |
+| Phase 9 | Billing, Ambulance, Blood Bank & Staff | ✅ Done |
+| Phase 10 | Integration, Testing & Deployment | 🔄 In Progress |
 
 ## Getting Started
 
